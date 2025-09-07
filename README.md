@@ -5,14 +5,15 @@ CruzOS v2 - an OS written in Rust
 1. Produce a 512 byte boot sector
 2. Boot my boot sector in QEMU
 
-# Part 1 - BIOS & Real Mode
-1. Use BIOS interrupts to print and read disk sectors
-2. Write text to VGA text buffer
+# Part 1 - 2-stage bootloader
+1. Use a 2-stage bootloader with disk loading
+2. Set up a basic memory map (query BIOS for available RAM)
 
 # Part 2 - Protected Mode
 1. Write GDT (Global Descriptor Table)
 2. Switch CPU from 16-bit real mode to 32-bit protected mode
-3. Write text to VGA without BIOS interrupts
+3. Go to long 64-bit mode
+4. Write text to VGA without BIOS interrupts
 
 # Part 3 - Rust!
 1. Write a minimal assembly stub that
@@ -21,11 +22,6 @@ CruzOS v2 - an OS written in Rust
     3. jumps into a Rust fn _start().
 2. Compile Rust for a freestanding target (#![no_std], #![no_main]).
 3. Link Rust object code with your assembly stub.
-
-# Part 4 - 2-stage bootloader
-1. Move to 2-stage bootloader using C/Rust
-2. Disk loading for bigger kernels
-3. Set up a basic memory map (query BIOS for available RAM)
 
 # Part 5 - Minimal Rust OS
 1. Implement an IDT (Interrupt Descriptor Table)

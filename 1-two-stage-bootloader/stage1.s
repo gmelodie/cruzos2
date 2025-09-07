@@ -7,6 +7,14 @@ _start:
     mov $0x03, %al
     int $0x10
 
+
+    # TODO: load stage 2
+    # Disable interrupts
+    # Load GDT
+    # Set CR0.PE = 1 (Protected Mode Enable bit).
+    # Do a far jump to flush the instruction pipeline.
+    # set up paging and enter long mode (64-bit) if you want to target x86_64. Most Rust OS projects do this.
+
     mov $some_string, %ax
     call print_string
 
@@ -41,7 +49,4 @@ some_string:
     .string "Hello World!"
 another_string:
     .string "Second thing!"
-
-.org 510
-.byte 0x55, 0xaa
 

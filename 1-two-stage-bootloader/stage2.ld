@@ -1,10 +1,10 @@
 OUTPUT_FORMAT(binary) /*   this is the important bit        */
                         /*   transform ELF into flat binary   */
 
-ENTRY(_start)
+ENTRY(_start2)
 SECTIONS
 {
-    . = 0x7c00;
+    . = 0x10000;
     .text : {
         *(.text)
     }
