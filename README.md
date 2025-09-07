@@ -1,8 +1,6 @@
 # cruzos2
 CruzOS v2 - an OS written in Rust
 
-I'll structure the first part of this as an assembly course, but I'm just going to be researching each topic on my own.
-
 # Part 0 - Groundwork
 1. Produce a 512 byte boot sector
 2. Boot my boot sector in QEMU
