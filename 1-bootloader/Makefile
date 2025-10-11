@@ -13,9 +13,12 @@ $(RT0).o: $(RT0).s
 	as --32 -o $@ $^
 
 $(KERNEL).bin: $(KERNEL).rs
-	rustc $(KERNEL).rs -C panic=abort --target thumbv7em-none-eabihf -o $@
+	rustc $(KERNEL).rs -C panic=abort --target x86_64-unknown-none -o $@
 
-$(BOOTLOADER).bin: $(BOOTLOADER).ld $(BOOTLOADER).o $(RT0).o
+$(KERNEL).o: $(KERNEL).rs
+	rustc $(KERNEL).rs -C panic=abort -C link-args="-T kernel.ld" --target x86_64-unknown-none --emit obj -o $@
+
+$(BOOTLOADER).bin: $(BOOTLOADER).ld $(BOOTLOADER).o $(RT0).o $(KERNEL).o
 	ld -m elf_i386 -T $(BOOTLOADER).ld -o $@
 
 clean:

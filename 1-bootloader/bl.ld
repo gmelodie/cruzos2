@@ -6,9 +6,9 @@ SECTIONS
     . = 0x7c00;
     .bootloader :
 	{
-	  rt0.o(.text) bl.o(.text) kernel.o(.text)
-	  rt0.o(.rodata) bl.o(.rodata) kernel.o(.rodata)
-	  rt0.o(.data) bl.o(.data) kernel.o(.data)
+	  rt0.o(.text) bl.o(.text)
+	  rt0.o(.rodata) bl.o(.rodata)
+	  rt0.o(.data) bl.o(.data)
 	  rt0.o(.bss) bl.o(.bss)
 	}
 
