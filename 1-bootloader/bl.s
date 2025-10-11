@@ -1,29 +1,23 @@
 .code16
-.global _start
+.global main
 
-_start:
+main:
     # clear screen
     mov $0x00, %ah
     mov $0x03, %al
     int $0x10
 
 
-    # TODO: load stage 2
+    mov $some_string, %ax
+    call print_string
+
+    ret
+    # TODO: load kernel
     # Disable interrupts
     # Load GDT
     # Set CR0.PE = 1 (Protected Mode Enable bit).
     # Do a far jump to flush the instruction pipeline.
     # set up paging and enter long mode (64-bit) if you want to target x86_64. Most Rust OS projects do this.
-
-    mov $some_string, %ax
-    call print_string
-
-    mov $another_string, %ax
-    call print_string
-
-.hang:
-    hlt
-    jmp .hang
 
 print_string:
     mov %ax, %bx
@@ -47,6 +41,4 @@ print_string:
 
 some_string:
     .string "Hello World!"
-another_string:
-    .string "Second thing!"
 
