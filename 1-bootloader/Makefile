@@ -1,9 +1,12 @@
 RT0 := rt0
 BOOTLOADER := bl
-KERNEL := kernel
+KERNEL := bootloader
 
-all: $(BOOTLOADER).bin $(KERNEL).bin
-	cat $(BOOTLOADER).bin $(KERNEL).bin > boot.img
+# all: $(BOOTLOADER).bin $(KERNEL).bin
+# 	cat $(BOOTLOADER).bin $(KERNEL).bin > boot.img
+# 	qemu-system-i386 -drive format=raw,file=boot.img -display gtk
+all: $(BOOTLOADER).bin
+	cat $(BOOTLOADER).bin > boot.img
 	qemu-system-i386 -drive format=raw,file=boot.img -display gtk
 
 $(BOOTLOADER).o: $(BOOTLOADER).s
@@ -12,11 +15,24 @@ $(BOOTLOADER).o: $(BOOTLOADER).s
 $(RT0).o: $(RT0).s
 	as --32 -o $@ $^
 
-$(KERNEL).bin: $(KERNEL).rs
-	rustc $(KERNEL).rs -C panic=abort --target x86_64-unknown-none -o $@
+$(KERNEL).bin:
+	RUSTFLAGS="-C panic=abort -C link-args=-Tkernel.ld" \
+	cargo +nightly build \
+	  -Z build-std=core,compiler_builtins \
+	  -Z build-std-features=compiler-builtins-mem \
+	  --target x86-16-real.json \
+	  --release
+	objcopy -O binary target/x86-16-real/release/bootloader $@
 
-$(KERNEL).o: $(KERNEL).rs
-	rustc $(KERNEL).rs -C panic=abort -C link-args="-T kernel.ld" --target x86_64-unknown-none --emit obj -o $@
+$(KERNEL).o:
+	RUSTFLAGS="-C panic=abort -C link-args=-Tkernel.ld" \
+	cargo +nightly rustc \
+	  -Z build-std=core,compiler_builtins \
+	  -Z build-std-features=compiler-builtins-mem \
+	  --target x86-16-real.json \
+	  --release \
+	  -- \
+	  --emit=obj -o $@
 
 $(BOOTLOADER).bin: $(BOOTLOADER).ld $(BOOTLOADER).o $(RT0).o $(KERNEL).o
 	ld -m elf_i386 -T $(BOOTLOADER).ld -o $@

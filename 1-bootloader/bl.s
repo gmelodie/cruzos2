@@ -11,6 +11,7 @@ bootloader:
     # print hello from bootloader
     mov $some_string, %ax
     call print_string
+    call kernel
 
 print_string:
     mov %ax, %bx
