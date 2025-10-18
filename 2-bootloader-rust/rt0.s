@@ -22,8 +22,8 @@ _start:
 init0:
         sti			        /* Reenable interruptions.                */
 
-        call bootloader		    /* Call bootloader
-halt:				        /* Upon main()'s return, halt.            */
+        call bootloader
+halt:
         hlt
         jmp halt
 
