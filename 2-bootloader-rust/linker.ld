@@ -1,5 +1,4 @@
-OUTPUT_FORMAT(binary) /*   this is the important bit        */
-                        /*   transform ELF into flat binary   */
+OUTPUT_FORMAT(elf32-i386) /* output to elf so that objcopy can effectively reduce size of binary */
 
 SECTIONS
 {
@@ -8,10 +7,10 @@ SECTIONS
     . = 0x7c00;
     .bootloader :
 	{
-	  rt0.o(.text)
-	  rt0.o(.rodata)
-	  rt0.o(.data)
-	  rt0.o(.bss)
+	  *(.text*)
+	  *(.rodata*)
+	  *(.data*)
+	  *(.bss*)
 	}
 
     /* Add boot section signature */
