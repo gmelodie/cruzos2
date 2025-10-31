@@ -3,6 +3,8 @@ OUTPUT_FORMAT(binary) /*   this is the important bit        */
 
 SECTIONS
 {
+	_END_STACK = 0x7c00;
+
     . = 0x7c00;
     .bootloader :
 	{
@@ -19,8 +21,6 @@ SECTIONS
         BYTE(0x55)
         BYTE(0xAA)
     }
-
-	_END_STACK = 0x7c00;
 
 }
 /* STARTUP(rt0.o)			 /1* Prepend with the start file. *1/ */

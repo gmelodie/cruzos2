@@ -2,14 +2,27 @@
 name = "bootloader"
 version = "0.1.0"
 edition = "2021"
+publish = false
 
 [lib]
-crate-type = ["staticlib"]  # produce .o for linking manually
-path = "src/lib.rs"
+crate-type = ["staticlib"] # avoid exposing weird symbols (functions are exposed with their own names)
+
+[profile.stage-1]
+inherits = "release"
+panic = "abort"
+opt-level = "s"
+lto = true
+codegen-units = 1
+debug = false
+overflow-checks = false
 
 [profile.release]
 panic = "abort"
+opt-level = "z"
+lto = true
+codegen-units = 1
+debug = false
+overflow-checks = false
 
-[profile.dev]
-panic = "abort"
+[dependencies]
 

@@ -1,7 +1,6 @@
 TARGET = x86-16-real.json
-RUSTC = cargo +nightly rustc
 ASM = rt0.o
-RUST_OBJ = bootloader.o
+RUST_OBJ = libbootloader.a
 OUT = bootloader.bin
 
 all: $(OUT)
@@ -11,19 +10,10 @@ $(ASM): rt0.s
 	as --32 $< -o $@
 
 $(RUST_OBJ):
-	RUSTFLAGS="-C panic=abort" \
-	$(RUSTC) \
-	  -Z build-std=core,compiler_builtins \
-	  -Z build-std-features=compiler-builtins-mem \
-	  --target $(TARGET) \
-	  --release \
-	  --lib \
-	  -- \
-	  -o $@ \
-	  --emit=obj
+	cargo build --profile=stage-1 -Zbuild-std=core --target ./x86-16-real.json -Zbuild-std-features=compiler-builtins-mem
 
 $(OUT): $(ASM) $(RUST_OBJ)
-	ld -m elf_i386 -T linker.ld -o $(OUT) $(ASM) $(RUST_OBJ)
+	ld -m elf_i386 -T linker.ld -o $@ $(ASM) target/x86-16-real/stage-1/$(RUST_OBJ)
 
 clean:
 	rm -f $(OUT) $(ASM) $(RUST_OBJ)
