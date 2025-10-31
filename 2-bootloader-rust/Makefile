@@ -4,7 +4,9 @@ RUST_OBJ = ./target/x86-16-real/stage-1/libbootloader.a
 BIN = bootloader.bin
 ELF = bootloader.elf
 
-all: $(BIN)
+.PHONY : all clean
+
+all: clean $(BIN)
 	qemu-system-i386 -drive format=raw,file=$(BIN) -display gtk
 
 $(ASM): rt0.s

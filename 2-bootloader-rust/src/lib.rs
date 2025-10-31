@@ -8,22 +8,18 @@ fn panic(_: &::core::panic::PanicInfo) -> ! {
     loop {}
 }
 
+unsafe fn print_char(c: u8) {
+    asm!(
+        "mov ah, 0x0E",
+        "int 0x10",
+        in("al") c,
+    );
+}
+
 // Print a string using BIOS teletype (int 0x10, AH=0x0E)
 unsafe fn println(line: &str) {
-    let ptr = line.as_ptr();
-    let mut i = 0u16;
-    loop {
-        let c = *ptr.add(i as usize);
-        if c == 0 {
-            break;
-        }
-        asm!(
-            "mov ah, 0x0E",
-            "mov al, {0}",
-            "int 0x10",
-            in(reg_byte) c,
-        );
-        i += 1;
+    for b in line.bytes() {
+        print_char(b);
     }
 
     // Newline
@@ -40,6 +36,7 @@ unsafe fn println(line: &str) {
 pub extern "C" fn bootloader() -> ! {
     unsafe {
         println("Hello from Rust 16-bit bootloader!");
+        println("Hello2 from Rust 16-bit bootloader!");
     }
     loop {}
 }
