@@ -7,15 +7,6 @@ publish = false
 [lib]
 crate-type = ["staticlib"] # avoid exposing weird symbols (functions are exposed with their own names)
 
-[profile.stage-1]
-inherits = "release"
-panic = "abort"
-opt-level = "s"
-lto = true
-codegen-units = 1
-debug = false
-overflow-checks = false
-
 [profile.release]
 panic = "abort"
 opt-level = "z"
@@ -23,6 +14,11 @@ lto = true
 codegen-units = 1
 debug = false
 overflow-checks = false
+
+[profile.stage-1]
+inherits = "release"
+opt-level = "s"
+
 
 [dependencies]
 
